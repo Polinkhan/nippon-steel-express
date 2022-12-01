@@ -43,7 +43,7 @@ const getAuth = ({ id, pass }, callback) => {
   console.log(id, pass);
   client.files.getDownloadURL(1079880257530).then((downloadURL) => {
     getAuthData(downloadURL, (data) => {
-      data[id].pass === pass ? callback(data[id]) : callback(null);
+      data[id].pass === pass ? callback(data[id]) : callback(false);
     });
   });
 };
