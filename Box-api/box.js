@@ -24,13 +24,15 @@ const getURLS = async ({ id, month, year, type }, callback) => {
     .then((results) => {
       results.entries.forEach((element) => {
         console.log(element.id);
-        client.files.getDownloadURL(element.id).then((downloadURL) => {
-          callback(downloadURL);
-        });
+        client.files
+          .getDownloadURL(element.id)
+          .then((downloadURL) => {
+            callback(downloadURL);
+          })
+          .catch(() => {
+            callback(false);
+          });
       });
-    })
-    .catch(() => {
-      callback(false);
     });
 };
 
