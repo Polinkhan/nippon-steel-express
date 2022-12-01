@@ -17,7 +17,7 @@ app.use(express.json());
 
 router.post("/", (req, res) => {
   const URLS = [];
-  getURLS(req.body, (url, total_size) => {
+  getURLS(req.body, (url) => {
     res.send(url);
     // URLS.push(url);
     // URLS.length === total_size && res.send(URLS);

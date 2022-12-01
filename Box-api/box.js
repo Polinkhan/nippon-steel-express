@@ -25,9 +25,12 @@ const getURLS = async ({ id, month, year, type }, callback) => {
       results.entries.forEach((element) => {
         console.log(element.id);
         client.files.getDownloadURL(element.id).then((downloadURL) => {
-          callback(downloadURL, results.total_count);
+          callback(downloadURL);
         });
       });
+    })
+    .catch(() => {
+      callback(false);
     });
 };
 
