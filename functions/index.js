@@ -16,7 +16,7 @@ const router = express.Router();
 
 app.use(express.json());
 
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
   const URLS = [];
   console.log(req.body);
   getURLS(req.body, (url, total_size) => {
@@ -25,11 +25,11 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/login", (req, res) => {
-  getAuth(req.body, (flag) => {
-    res.send(flag);
-  });
-});
+// router.post("/login", (req, res) => {
+//   getAuth(req.body, (flag) => {
+//     res.send(flag);
+//   });
+// });
 
 app.use("/.netlify/functions/index", router);
 
