@@ -22,17 +22,16 @@ const getURLS = async ({ id, month, year, type }, callback) => {
       fields: "name",
     })
     .then((results) => {
-      results.entries.forEach((element) => {
-        console.log(element.id);
-        client.files
-          .getDownloadURL(element.id)
-          .then((downloadURL) => {
+      if (results.total_count) {
+        results.entries.forEach((element) => {
+          console.log(element.id);
+          client.files.getDownloadURL(element.id).then((downloadURL) => {
             callback(downloadURL);
-          })
-          .catch(() => {
-            callback(false);
           });
-      });
+        });
+      } else {
+        callback(false);
+      }
     });
 };
 
