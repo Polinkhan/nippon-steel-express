@@ -16,7 +16,7 @@ const router = express.Router();
 
 app.use(express.json());
 
-router.post("/geturl", (req, res) => {
+router.get("/", (req, res) => {
   const URLS = [];
   console.log(req.body);
   getURLS(req.body, (url, total_size) => {
@@ -25,7 +25,7 @@ router.post("/geturl", (req, res) => {
   });
 });
 
-router.post("/login", (req, res) => {
+router.get("/login", (req, res) => {
   getAuth(req.body, (flag) => {
     res.send(flag);
   });
