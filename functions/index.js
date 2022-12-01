@@ -25,11 +25,11 @@ router.post("/", (req, res) => {
   });
 });
 
-// router.post("/login", (req, res) => {
-//   getAuth(req.body, (flag) => {
-//     res.send(flag);
-//   });
-// });
+router.post("/login", (req, res) => {
+  getAuth(req.body, (flag) => {
+    res.send(flag);
+  });
+});
 
 app.use("/.netlify/functions/index", router);
 
