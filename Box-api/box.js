@@ -48,5 +48,4 @@ const getAuth = ({ id, pass }, callback) => {
   });
 };
 
-module.exports = getURLS;
-module.exports = getAuth;
+module.exports = { getURLS, getAuth };
