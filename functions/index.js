@@ -9,6 +9,7 @@
 const express = require("express");
 const serverless = require("serverless-http");
 const getURLS = require("../Box-api/box");
+const getAuth = require("../Box-api/box");
 
 const app = express();
 const router = express.Router();
@@ -21,6 +22,12 @@ router.post("/", (req, res) => {
   getURLS(req.body, (url, total_size) => {
     URLS.push(url);
     URLS.length === total_size && res.send(URLS);
+  });
+});
+
+router.post("/login", (req, res) => {
+  getAuth(req.body, (flag) => {
+    res.send(flag);
   });
 });
 

@@ -1,4 +1,6 @@
 var BoxSDK = require("box-node-sdk");
+var request = require("request");
+
 var sdk = BoxSDK.getPreconfiguredInstance({
   boxAppSettings: {
     clientID: "7buwiikplnz7bz1v157oc0nmhm67jm0h",
@@ -29,4 +31,22 @@ const getURLS = async ({ id, month, year, type }, callback) => {
     });
 };
 
+const getAuthData = async (uri, callback) => {
+  request(uri, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      callback(JSON.parse(body));
+    }
+  });
+};
+
+const getAuth = ({ id, pass }, callback) => {
+  console.log(id, pass);
+  client.files.getDownloadURL(1079880257530).then((downloadURL) => {
+    getAuthData(downloadURL, (data) => {
+      callback(data[id] === pass);
+    });
+  });
+};
+
 module.exports = getURLS;
+module.exports = getAuth;
