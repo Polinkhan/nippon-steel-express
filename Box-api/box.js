@@ -46,7 +46,7 @@ const getAuthData = async (uri, callback) => {
 
 const getAuth = ({ id, pass }, callback) => {
   console.log(id, pass);
-  client.files.getDownloadURL(1079880257530).then((downloadURL) => {
+  client.files.getDownloadURL(1082843525964).then((downloadURL) => {
     getAuthData(downloadURL, (data) => {
       if (data[id]) {
         data[id].pass === pass ? callback(data[id]) : callback(false);
