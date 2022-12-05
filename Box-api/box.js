@@ -20,6 +20,7 @@ const getURLS = async ({ id, month, year, type }, callback) => {
   client.search
     .query(`${id} && ${month} && ${year} && ${type}`, {
       fields: "name",
+      type: "file",
     })
     .then((results) => {
       if (results.total_count) {
