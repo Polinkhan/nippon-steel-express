@@ -46,15 +46,20 @@ const getAuthData = async (uri, callback) => {
 
 const getAuth = ({ id, pass }, callback) => {
   console.log(id, pass);
-  client.files.getDownloadURL(1082843525964).then((downloadURL) => {
+  let userData;
+  client.files.getDownloadURL(1079880257530).then((downloadURL) => {
     getAuthData(downloadURL, (data) => {
       if (data[id]) {
-        data[id].pass === pass ? callback(data[id]) : callback(false);
+        data[id].pass === pass ? (userData = data[id]) : callback(false, false);
       } else {
-        callback(false);
+        callback(false, false);
       }
     });
   });
+  client.files.getDownloadURL(1082835943562).then((downloadURL) => {
+    getAuthData(downloadURL, (data) => {
+      callback(userData, data);
+    });
+  });
 };
-
 module.exports = { getURLS, getAuth };
