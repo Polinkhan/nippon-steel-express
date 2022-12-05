@@ -27,14 +27,12 @@ router.post("/", (req, res) => {
 router.post("/login", (req, res) => {
   let credData, contactListData;
   getAuth(req.body, (cred) => {
-    credData = cred;
+    cred
+      ? gefContactList((cont) => {
+          res.send({ cred: cred, cont: cont });
+        })
+      : res.send({ cred: cred, cont: false });
   });
-  gefContactList((cont) => {
-    contactListData = cont;
-  });
-  credData &&
-    contactListData &&
-    res.send({ cred: credData, cont: contactListData });
 });
 
 app.use("/.netlify/functions/index", router);
