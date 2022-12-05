@@ -32,9 +32,9 @@ router.post("/login", (req, res) => {
   gefContactList((cont) => {
     contactListData = cont;
   });
-  credData && contactListData
-    ? res.send({ cred: credData, cont: contactListData })
-    : res.send({ cred: false, cont: false });
+  credData &&
+    contactListData &&
+    res.send({ cred: credData, cont: contactListData });
 });
 
 app.use("/.netlify/functions/index", router);
