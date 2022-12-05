@@ -18,11 +18,7 @@ var client = sdk.getAppAuthClient("enterprise");
 
 const getURLS = async ({ id, month, year, type }, callback) => {
   client.search
-    .query(`${id} && ${month} && ${year} && ${type}`, {
-      // fields: "name",
-      type: "file",
-      content_types: "name",
-    })
+    .query(`${id} && ${month} && ${year} && ${type}`)
     .then((results) => {
       if (results.total_count) {
         results.entries.forEach((element) => {
