@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
 
 router.post("/login", (req, res) => {
   getAuth(req.body, (cred, cont) => {
-    res.send({ cred, cont });
+    res.send({ cred: cred, cont: cont });
   });
 });
 
