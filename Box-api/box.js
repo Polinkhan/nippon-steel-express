@@ -19,7 +19,7 @@ var client = sdk.getAppAuthClient("enterprise");
 const getURLS = async ({ id, month, year, type }, callback) => {
   client.search
     .query(`${id}_${month}_${year}_${type}`, {
-      fields: "name,modified_at,size,extension,permissions,sync_state",
+      fields: "name",
     })
     .then((results) => {
       if (results.total_count) {
