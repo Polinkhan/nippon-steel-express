@@ -8,7 +8,7 @@
 
 const express = require("express");
 const serverless = require("serverless-http");
-const { getURLS, getAuth } = require("../Box-api/box");
+const { getURLS, getAuth, gefContactList } = require("../Box-api/box");
 
 const app = express();
 const router = express.Router();
@@ -25,9 +25,16 @@ router.post("/", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  getAuth(req.body, (cred, cont) => {
-    res.send({ cred: cred, cont: cont });
+  let credData, contactListData;
+  getAuth(req.body, (cred) => {
+    credData = cred;
   });
+  gefContactList((cont) => {
+    contactListData = cont;
+  });
+  credData && contactListData
+    ? res.send({ cred: credData, cont: contactListData })
+    : res.send({ cred: false, cont: false });
 });
 
 app.use("/.netlify/functions/index", router);

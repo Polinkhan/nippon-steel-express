@@ -36,7 +36,7 @@ const getURLS = async ({ id, month, year, type }, callback) => {
     });
 };
 
-const getAuthData = async (uri, callback) => {
+const readJsonData = async (uri, callback) => {
   request(uri, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       callback(JSON.parse(body));
@@ -45,20 +45,23 @@ const getAuthData = async (uri, callback) => {
 };
 
 const getAuth = ({ id, pass }, callback) => {
-  let userData;
   client.files.getDownloadURL(1082843525964).then((downloadURL) => {
-    getAuthData(downloadURL, (data) => {
+    readJsonData(downloadURL, (data) => {
       if (data[id]) {
-        data[id].pass === pass ? (userData = data[id]) : callback(false, false);
+        data[id].pass === pass ? (userData = data[id]) : callback(false);
       } else {
-        callback(false, false);
+        callback(false);
       }
     });
   });
+};
+
+const gefContactList = (callback) => {
   client.files.getDownloadURL(1082835943562).then((downloadURL) => {
-    getAuthData(downloadURL, (data) => {
-      callback(userData && userData, data);
+    readJsonData(downloadURL, (data) => {
+      callback(data);
     });
   });
 };
-module.exports = { getURLS, getAuth };
+
+module.exports = { getURLS, getAuth, gefContactList };
