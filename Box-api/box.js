@@ -48,7 +48,7 @@ const getAuth = ({ id, pass }, callback) => {
   client.files.getDownloadURL(1082843525964).then((downloadURL) => {
     readJsonData(downloadURL, (data) => {
       if (data[id]) {
-        data[id].pass === pass ? (userData = data[id]) : callback(false);
+        data[id].pass === pass ? callback(data[id]) : callback(false);
       } else {
         callback(false);
       }
