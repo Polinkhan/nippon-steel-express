@@ -2,7 +2,7 @@
  * ? 30/11/2022
  * ? Title -> 'Express'
  * ? Program -> 'ExpressJs'
- * ? Description -> 'Learing Express JS'
+ * ? Description -> 'Express JS'
  * ? Author -> 'Abu Sayed Polin'
  */
 
@@ -16,6 +16,7 @@ const router = express.Router();
 app.use(express.json());
 
 router.post("/", (req, res) => {
+  console.log("gg");
   const URLS = [];
   getURLS(req.body, (url) => {
     res.send(url);
@@ -34,6 +35,12 @@ router.post("/login", (req, res) => {
       : res.send({ cred: cred, cont: false });
   });
 });
+
+app.use("/auth", router);
+
+// app.listen(3000, () => {
+//   console.log("listening on port 3000");
+// });
 
 app.use("/.netlify/functions/index", router);
 
