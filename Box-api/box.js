@@ -65,4 +65,15 @@ const gefContactList = (callback) => {
   });
 };
 
-module.exports = { getURLS, getAuth, gefContactList };
+const getFolderItems = async (callback) => {
+  const urls = [];
+  client.folders.getItems("185659716183").then(async (items) => {
+    items.entries.forEach(async (item) => {
+      const url = await client.files.getDownloadURL(item.id);
+      urls.push(url);
+      if (items.total_count === urls.length) callback(urls);
+    });
+  });
+};
+
+module.exports = { getURLS, getAuth, gefContactList, getFolderItems };

@@ -8,7 +8,12 @@
 
 const express = require("express");
 const serverless = require("serverless-http");
-const { getURLS, getAuth, gefContactList } = require("../Box-api/box");
+const {
+  getURLS,
+  getAuth,
+  gefContactList,
+  getFolderItems,
+} = require("../Box-api/box");
 
 const app = express();
 const router = express.Router();
@@ -16,8 +21,6 @@ const router = express.Router();
 app.use(express.json());
 
 router.post("/", (req, res) => {
-  console.log("gg");
-  const URLS = [];
   getURLS(req.body, (url) => {
     res.send(url);
     // URLS.push(url);
@@ -25,8 +28,13 @@ router.post("/", (req, res) => {
   });
 });
 
+router.post("/ad", (req, res) => {
+  getFolderItems((urls) => {
+    res.send(urls);
+  });
+});
+
 router.post("/login", (req, res) => {
-  let credData, contactListData;
   getAuth(req.body, (cred) => {
     cred
       ? gefContactList((cont) => {
