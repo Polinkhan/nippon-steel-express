@@ -13,6 +13,7 @@ const {
   getAuth,
   gefContactList,
   getFolderItems,
+  getUpdateInfo,
 } = require("../Box-api/box");
 
 const app = express();
@@ -31,6 +32,12 @@ router.post("/", (req, res) => {
 router.post("/ad", (req, res) => {
   getFolderItems((urls) => {
     res.send(urls);
+  });
+});
+
+router.post("/update", (req, res) => {
+  getUpdateInfo(req.body.name, (link) => {
+    res.send(link);
   });
 });
 

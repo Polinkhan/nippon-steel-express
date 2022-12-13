@@ -76,4 +76,23 @@ const getFolderItems = async (callback) => {
   });
 };
 
-module.exports = { getURLS, getAuth, gefContactList, getFolderItems };
+const getUpdateInfo = async (name, callback) => {
+  client.folders.getItems("186066430316").then(async (items) => {
+    items.entries.forEach(async (item) => {
+      console.log(item.name === name);
+      if (item.name === name) callback(false);
+      else {
+        const url = await client.files.getDownloadURL(item.id);
+        callback(url);
+      }
+    });
+  });
+};
+
+module.exports = {
+  getURLS,
+  getAuth,
+  gefContactList,
+  getFolderItems,
+  getUpdateInfo,
+};
