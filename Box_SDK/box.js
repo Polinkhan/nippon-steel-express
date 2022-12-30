@@ -1,4 +1,5 @@
 var BoxSDK = require("box-node-sdk");
+const createHttpError = require("http-errors");
 var request = require("request");
 
 var sdk = BoxSDK.getPreconfiguredInstance({
@@ -19,50 +20,21 @@ var client = sdk.getAppAuthClient("enterprise");
 
 const getURLS = async ({ id, month, year, type }, callback) => {
   client.search
-    .query(`${id} && ${type} && ${year} && ${month}`, {
+    .query(`"${id} ${type} ${year} ${month}"`, {
       fields: "name",
       type: "file",
     })
     .then((results) => {
       if (results.total_count) {
-        results.entries.forEach((element) => {
-          console.log(element.id);
-          client.files.getDownloadURL(element.id).then((downloadURL) => {
+        client.files
+          .getDownloadURL(results.entries[0].id)
+          .then((downloadURL) => {
             callback(downloadURL);
           });
-        });
       } else {
         callback(false);
       }
     });
-};
-
-const readJsonData = async (uri, callback) => {
-  request(uri, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      callback(JSON.parse(body));
-    }
-  });
-};
-
-const getAuth = ({ id, pass }, callback) => {
-  client.files.getDownloadURL(1087410696882).then((downloadURL) => {
-    readJsonData(downloadURL, (data) => {
-      if (data[id]) {
-        data[id].pass === pass ? callback(data[id]) : callback(false);
-      } else {
-        callback(false);
-      }
-    });
-  });
-};
-
-const gefContactList = (callback) => {
-  client.files.getDownloadURL(1087412535193).then((downloadURL) => {
-    readJsonData(downloadURL, (data) => {
-      callback(data);
-    });
-  });
 };
 
 const getFolderItems = async (callback) => {
@@ -79,7 +51,6 @@ const getFolderItems = async (callback) => {
 const getUpdateInfo = async (name, callback) => {
   client.folders.getItems("186066430316").then(async (items) => {
     items.entries.forEach(async (item) => {
-      console.log(item.name === name);
       if (item.name === name) callback(false);
       else {
         const url = await client.files.getDownloadURL(item.id);
@@ -91,8 +62,6 @@ const getUpdateInfo = async (name, callback) => {
 
 module.exports = {
   getURLS,
-  getAuth,
-  gefContactList,
   getFolderItems,
   getUpdateInfo,
 };
