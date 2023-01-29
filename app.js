@@ -6,8 +6,7 @@ var cors = require("cors");
 require("dotenv").config();
 
 //Scafolding
-const AuthRoute = require("./Routes/Client.route");
-const BoxRoute = require("./Routes/Box.route");
+const AuthRoute = require("./Routes/Auth.route");
 const DBRoute = require("./Routes/DB.routes");
 
 // const { verifyAccessToken } = require("./helpers/jwt_helper");
@@ -26,10 +25,10 @@ app.get("/", async (req, res, next) => {
 });
 
 app.use("/auth", AuthRoute);
-app.use("/boxData", BoxRoute);
 app.use("/db", DBRoute);
 
 app.use((error, req, res, next) => {
+  console.log(33, error.message);
   res.status(error.status || 500);
   res.send({
     error: {
@@ -39,7 +38,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen();
-// app.listen(3000, () => {
-//   console.log("listening on port 3000");
-// });
+// app.listen();
+app.listen(3000, () => {
+  console.log("listening on port 3000");
+});
