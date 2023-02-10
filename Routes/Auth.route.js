@@ -7,39 +7,24 @@ const db = require("../mySQL/db_init");
 
 router.get("/", verifyAccessToken, async (req, res, next) => {
   const { aud } = req.payload;
-  getAuthDetails(aud);
-  const infoQuery = "SELECT * FROM usersInfo WHERE userid = ?";
-
-  try {
-    const [result] = await db.query(infoQuery, [aud]);
-    res.send({ user: result[0] });
-  } catch (err) {
-    next(err);
-  }
+  const user = await getAuthDetails(aud);
+  res.send({ user: { UserID: aud, ...user } });
 });
 
 router.post("/login", async (req, res, next) => {
   const { id, pass } = req.body;
-
-  const infoQuery = "SELECT * FROM usersInfo WHERE userid = ?";
-  const authQuery = "SELECT * FROM userAuth WHERE userid = ? and password = ?";
-  const maintenanceQuery = "SELECT * FROM `AppSettings` WHERE 1";
-  try {
-    const [result_0] = await db.query(maintenanceQuery);
-    const { MaintenanceMode } = result_0[0];
-    if (MaintenanceMode === "True")
-      next(createError.BadRequest("Server In Under Maintenance !!"));
-
-    const [result_1] = await db.query(authQuery, [id, pass]);
-    if (result_1.length) {
-      const accessToken = await signAccessToken(id);
-      const [result_2] = await db.query(infoQuery, [id]);
-      res.send({ user: result_2[0], accessToken });
-    } else throw createError.BadRequest("Invalid UserID/Password");
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
+  getAuthDetails(id, pass)
+    .then(async (user) => {
+      if (user.Pass === pass) {
+        const accessToken = await signAccessToken(id);
+        res.send({ accessToken, user: { UserID: id, ...user } });
+      } else {
+        throw new createError.BadRequest("Password not matched");
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 router.post("/password/:type", async (req, res, next) => {

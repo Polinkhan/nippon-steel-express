@@ -25,6 +25,7 @@ const signRefreshToken = async (userId) =>
   await genarateToken(userId, process.env.JWT_REFRESH_TOKEN_SECRET, "1y");
 
 const verifyAccessToken = async (req, res, next) => {
+  console.log("got");
   const maintenanceQuery = "SELECT * FROM `AppSettings` WHERE 1";
   const [result_0] = await db.query(maintenanceQuery);
   const { MaintenanceMode } = result_0[0];

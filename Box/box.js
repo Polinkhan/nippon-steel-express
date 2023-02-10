@@ -77,11 +77,11 @@ const getAuthDetails = async (id = -1, pass = -1) => {
   return new Promise(async (resolve, reject) => {
     const downloadURL = await client.files.getDownloadURL(1136781305145);
     const data = await readJsonData(downloadURL);
-    console.log(data);
+    console.log(data, id, pass);
     if (data[id]) {
-      data[id].pass === pass ? callback(data[id]) : callback(false);
+      resolve(data[id]);
     } else {
-      // callback(false);
+      reject({ message: "User not found" });
     }
   });
 };
