@@ -28,7 +28,6 @@ app.use("/auth", AuthRoute);
 app.use("/db", DBRoute);
 
 app.use((error, req, res, next) => {
-  console.log(33, error.message);
   res.status(error.status || 500);
   res.send({
     error: {

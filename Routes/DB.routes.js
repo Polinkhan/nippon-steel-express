@@ -1,5 +1,6 @@
 const express = require("express");
 const createError = require("http-errors");
+const { getPDFURL } = require("../Box/box");
 const router = express.Router();
 const db = require("../mySQL/db_init");
 
@@ -25,17 +26,14 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.get("/getPayslipData/:id/:date", async (req, res, next) => {
+router.post("/getPayslipData/:id", async (req, res, next) => {
   try {
-    const { id, date } = req.params;
-    console.log(id, date);
-    const [result] = await db.query(
-      `SELECT * FROM Payslip_Table WHERE ID = ? and Term = ?`,
-      [id, date]
-    );
-    res.send(result[0]);
+    const { id } = req.params;
+    const { month, year, type } = req.body;
+    const { name, fileUrl } = await getPDFURL(id, month, year, type);
+    console.log("Sends");
+    res.send({ name, fileUrl });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 });

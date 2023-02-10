@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 const db = require("../mySQL/db_init");
+const { getAuthDetails } = require("../Box/box");
 
 const genarateToken = (userId, secret, expTime) => {
   return new Promise((resolve, reject) => {

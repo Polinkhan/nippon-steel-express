@@ -1,11 +1,13 @@
 const express = require("express");
 const createError = require("http-errors");
+const { getAuthDetails } = require("../Box/box");
 const { verifyAccessToken, signAccessToken } = require("../JWT/jwt_auth");
 const router = express.Router();
 const db = require("../mySQL/db_init");
 
 router.get("/", verifyAccessToken, async (req, res, next) => {
   const { aud } = req.payload;
+  getAuthDetails(aud);
   const infoQuery = "SELECT * FROM usersInfo WHERE userid = ?";
 
   try {
