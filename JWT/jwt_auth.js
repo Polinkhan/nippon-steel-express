@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
-const db = require("../mySQL/db_init");
-const { getAuthDetails } = require("../Box/box");
 
 const genarateToken = (userId, secret, expTime) => {
   return new Promise((resolve, reject) => {
@@ -25,13 +23,6 @@ const signRefreshToken = async (userId) =>
   await genarateToken(userId, process.env.JWT_REFRESH_TOKEN_SECRET, "1y");
 
 const verifyAccessToken = async (req, res, next) => {
-  console.log("got");
-  const maintenanceQuery = "SELECT * FROM `AppSettings` WHERE 1";
-  const [result_0] = await db.query(maintenanceQuery);
-  const { MaintenanceMode } = result_0[0];
-  if (MaintenanceMode === "True")
-    next(createError.BadRequest("Server In Under Maintenance !!"));
-
   const token = req.headers.authorization;
   if (!token) return next(createError.Unauthorized());
   jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (err, payload) => {

@@ -1,26 +1,13 @@
 const express = require("express");
-const createError = require("http-errors");
-const { getPDFURL } = require("../Box/box");
+const { getPDFURL, gefContactList, getAdPictures } = require("../Box/box");
 const router = express.Router();
-const db = require("../mySQL/db_init");
 
 router.get("/:id", async (req, res, next) => {
-  let Date = [];
-  let type = [];
   const { id } = req.params;
-  const dataQuery = "SELECT Term FROM Payslip_Table WHERE ID = ?";
   try {
-    const [Date_res] = await db.query(dataQuery, [id]);
-    const [type_res] = await db.query(`SELECT Type FROM typeList`);
-    const [contact_res] = await db.query(`SELECT * FROM ContactList`);
-
-    Date_res.forEach((list) => {
-      Date.push(list.Term);
-    });
-    type_res.forEach((list) => {
-      type.push(list.Type);
-    });
-    res.send({ Date, type, contact_res });
+    const admin = await gefContactList();
+    const images = await getAdPictures();
+    res.send({ admin, images });
   } catch (err) {
     next(err);
   }
