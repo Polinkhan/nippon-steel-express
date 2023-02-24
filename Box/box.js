@@ -29,8 +29,9 @@ const getPDFURL = (id, month, year, type) => {
     if (!month || !year || !type) {
       reject({ status: 500, message: "Input Field Missing" });
     }
+    console.log(`"${id}_${month}_${year}_${type}"`);
     client.search
-      .query(`"${id}_${type}_${year}_${month}"`, {
+      .query(`"${id}_${month}_${year}_${type}"`, {
         fields: "name",
         type: "file",
       })
@@ -78,6 +79,12 @@ const gefContactList = async () => {
   return admin;
 };
 
+const getUpdateStatus = async () => {
+  const downloadURL = await client.files.getDownloadURL(1149232121941);
+  const { app_update } = await readJsonData(downloadURL);
+  return app_update;
+};
+
 const getAdPictures = () => {
   return new Promise(async (resolve, reject) => {
     const images = [];
@@ -90,4 +97,10 @@ const getAdPictures = () => {
   });
 };
 
-module.exports = { getPDFURL, getAuthDetails, gefContactList, getAdPictures };
+module.exports = {
+  getPDFURL,
+  getAuthDetails,
+  gefContactList,
+  getAdPictures,
+  getUpdateStatus,
+};
