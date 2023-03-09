@@ -17,9 +17,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.get("/", verifyAccessToken, async (req, res, next) => {
-//   res.send("hello");
-// });
 app.get("/", async (req, res, next) => {
   res.send("api is working");
 });
@@ -37,7 +34,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen();
-// app.listen(3000, () => {
-//   console.log("listening on port 3000");
-// });
+// app.listen();
+app.listen(3000, () => {
+  console.log("listening on port 3000");
+});

@@ -1,6 +1,5 @@
 var BoxSDK = require("box-node-sdk");
 var request = require("request");
-const createError = require("http-errors");
 
 var sdk = BoxSDK.getPreconfiguredInstance({
   boxAppSettings: {
@@ -30,11 +29,12 @@ const getPDFURL = (id, month, year, type) => {
       reject({ status: 500, message: "Input Field Missing" });
     }
     client.search
-      .query(`"${id}_${type}_${year}_${month}"`, {
+      .query(`"${id}_${month}_${year}_${type}"`, {
         fields: "name",
         type: "file",
       })
       .then((results) => {
+        console.log(results);
         if (results.total_count) {
           results.entries.forEach(async (element) => {
             const fileUrl = await getUrl(element.id);
@@ -61,9 +61,7 @@ const getAuthDetails = async (id) => {
   return new Promise(async (resolve, reject) => {
     if (!id) reject({ message: "Empty Field" });
     const downloadURL = await client.files.getDownloadURL(1136781305145);
-    console.log(downloadURL);
     const { Credentials, Details } = await readJsonData(downloadURL);
-    console.log(Credentials, Details);
     if (Credentials[id]) {
       resolve({ Credential: Credentials[id], Detail: Details[id] });
     } else {
@@ -72,7 +70,15 @@ const getAuthDetails = async (id) => {
   });
 };
 
-const gefContactList = async () => {
+const getUserDetails = async (id) => {
+  return new Promise(async (resolve, reject) => {
+    const downloadURL = await client.files.getDownloadURL(1136781305145);
+    const { Details } = await readJsonData(downloadURL);
+    resolve(Details[id]);
+  });
+};
+
+const getContactList = async () => {
   const downloadURL = await client.files.getDownloadURL(1137358561131);
   const { admin } = await readJsonData(downloadURL);
   return admin;
@@ -90,4 +96,10 @@ const getAdPictures = () => {
   });
 };
 
-module.exports = { getPDFURL, getAuthDetails, gefContactList, getAdPictures };
+module.exports = {
+  getPDFURL,
+  getAuthDetails,
+  getContactList,
+  getAdPictures,
+  getUserDetails,
+};
